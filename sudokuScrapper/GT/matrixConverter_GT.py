@@ -4,6 +4,7 @@
 
 import cv2
 import numpy as np
+import pandas as pd
 from trainDigitRecognition_GT import knn_digit_train
 from trainPatternRecognition_GT import knn_greater_train, create_masked_image
 
@@ -108,6 +109,10 @@ knn_greater= knn_greater_train()  # knn for the digit recognition
 
 image_path = 'gt_1.jpg'  # Unsolved one to try
 try:
-    sudoku_matrix, sudoku_greater_matrix = image_to_sudoku_matrix(image_path, knn_digit, knn_greater)
+    sudoku_digit_matrix, sudoku_greater_matrix = image_to_sudoku_matrix(image_path, knn_digit, knn_greater)
+
+    pd.DataFrame(sudoku_greater_matrix).to_csv('sudoku_greater_matrix.csv', index=False, header=False)
+    pd.DataFrame(sudoku_digit_matrix).to_csv('sudoku_digit_matrix.csv', index=False, header=False)
+
 except FileNotFoundError as e:
     print(e)
