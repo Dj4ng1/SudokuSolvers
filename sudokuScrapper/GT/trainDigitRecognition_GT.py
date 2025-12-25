@@ -25,11 +25,11 @@ def load_data_from_directory(directory):
 
     return np.array(X), np.array(y)
 
+#Knn for the recognition of the digits
+def knn_digit_train():
 
-def knn_train():
-
-    X_train, y_train = load_data_from_directory('Training')
-    X_test, y_test = load_data_from_directory('Test')
+    X_train, y_train = load_data_from_directory('Training_GT_Digit')
+    X_test, y_test = load_data_from_directory('Test_Digit')
 
     # WOrks best in 2d
     X_train = X_train.reshape(X_train.shape[0], -1)
@@ -46,5 +46,19 @@ def knn_train():
     accuracy = accuracy_score(y_test, y_pred)
     print(f'Accuracy: {accuracy * 100:.2f}%')
 
+    errors = []
+    for i in range(len(y_pred)):
+        if y_pred[i] != y_test[i]:
+            errors.append((y_test[i], y_pred[i], i))  # Collect true label, predicted label, and the index
+
+    # Print the errors
+    if errors:
+        print("\nMisclassified Samples:")
+        for true, predicted, index in errors:
+            print(f"Index: {index}, True Label: {true}, Predicted Label: {predicted}")
+    else:
+        print("No misclassifications found.")
+
     return knn
+
 

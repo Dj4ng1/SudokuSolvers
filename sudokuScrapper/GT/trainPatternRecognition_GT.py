@@ -1,3 +1,7 @@
+#The labels are in the form of 4 chars corresponding to the north, east, south and west borders of each cell respectively
+#n = None  g = Greater than  l = Less than.
+#Tested accuracy was 100%
+
 import cv2
 import numpy as np
 import os
@@ -48,31 +52,38 @@ def prepare_data_from_directory(directory):
 
     return np.array(X), np.array(y)
 
-# Prepare training data from the Training folder
-X_train, y_train = prepare_data_from_directory('Training_GT_Greater')  # Adjust path as necessary
+#Knn for the recognition of the greater signs
+def knn_greater_train():
 
-# Initialize and train KNN model
-knn = KNeighborsClassifier(n_neighbors=5)
-knn.fit(X_train, y_train)
+    # Prepare training data from the Training folder
+    X_train, y_train = prepare_data_from_directory('Training_GT_Greater')  # Adjust path as necessary
 
-# Prepare test data from the Test folder
-X_test, y_test = prepare_data_from_directory('Test_Greater')  # Adjust path as necessary
+    # Initialize and train KNN model
+    knn = KNeighborsClassifier(n_neighbors=5)
+    knn.fit(X_train, y_train)
 
-# Evaluate KNN model
-y_pred = knn.predict(X_test)  # Make predictions
-accuracy = knn.score(X_test, y_test)
-print(f'Accuracy: {accuracy * 100:.2f}%')
+    # Prepare test data from the Test folder
+    X_test, y_test = prepare_data_from_directory('Test_Greater')  # Adjust path as necessary
+    # Evaluate KNN model
+    y_pred = knn.predict(X_test)  # Make predictions
+    accuracy = knn.score(X_test, y_test)
 
-# Display errors
-errors = []
-for i in range(len(y_pred)):
-    if y_pred[i] != y_test[i]:
-        errors.append((y_test[i], y_pred[i], i))  # Collect true label, predicted label, and the index
+    print(f'Accuracy: {accuracy * 100:.2f}%')
 
-# Print the errors
-if errors:
-    print("\nMisclassified Samples:")
-    for true, predicted, index in errors:
-        print(f"Index: {index}, True Label: {true}, Predicted Label: {predicted}")
-else:
-    print("No misclassifications found.")
+    # Display errors
+    errors = []
+    for i in range(len(y_pred)):
+        if y_pred[i] != y_test[i]:
+            errors.append((y_test[i], y_pred[i], i))  # Collect true label, predicted label, and the index
+
+    # Print the errors
+    if errors:
+        print("\nMisclassified Samples:")
+        for true, predicted, index in errors:
+            print(f"Index: {index}, True Label: {true}, Predicted Label: {predicted}")
+    else:
+        print("No misclassifications found.")
+
+    return knn
+
+knn_greater_train()
