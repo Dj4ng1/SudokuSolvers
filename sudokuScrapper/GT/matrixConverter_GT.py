@@ -54,8 +54,7 @@ def image_to_sudoku_matrix(image_path, knn_digit, knn_greater):
             cell_resized = cv2.resize(cell, (48, 48))  # Resize to match training size
 
             cell_flat = cell_resized.flatten() / 255.0  
-          #  print(cell_resized.shape[0])
-            # print(cell_flat.shape[0])
+
 
             prediction = knn_digit.predict([cell_flat])
             digit = prediction[0]
@@ -65,11 +64,7 @@ def image_to_sudoku_matrix(image_path, knn_digit, knn_greater):
             else:
                 sudoku_digit_matrix[i, j] = 0  # If KNN can't predict, fill with 0
 
-            # if digit >= 0 and digit <= 9:
-            #     cv2.putText(img, str(digit), 
-            #                 (j * cell_size + cell_size // 4, i * cell_size + 3 * cell_size // 4),
-            #                 cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 0), 2, cv2.LINE_AA)
-                
+
 
    ############Now we do the same for the greater than side##########
             cell = img[i * cell_size_gray:(i + 1) * cell_size_gray, j * cell_size_gray:(j + 1) * cell_size_gray]
